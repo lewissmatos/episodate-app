@@ -28,11 +28,14 @@ const MovieDetails = ({
 	open,
 	onClose,
 }) => {
+	//Seasons state
 	const [seasons, setSeasons] = useState();
 
+	//Divide an array of episodes in seasons by the season property
 	const divideEpisodesBySeasons = (episodes) => {
 		const seasons = [];
 
+		//Map the episodes
 		episodes?.forEach((episode) => {
 			const seasonNumber = episode.season - 1;
 
@@ -49,6 +52,7 @@ const MovieDetails = ({
 	};
 
 	useEffect(() => {
+		//Call the function to divide and set the seasons
 		divideEpisodesBySeasons(episodes);
 
 		return () => {
@@ -148,6 +152,7 @@ const MovieDetails = ({
 						</Typography>
 						<Typography>
 							<Typography sx={{ fontWeight: 600 }}>Genrers: </Typography>{" "}
+							{/* Join the genrers array to show them as a text */}
 							{genres?.join(", ")}
 						</Typography>
 						<Typography>
@@ -165,6 +170,7 @@ const MovieDetails = ({
 								overflowX: "auto",
 							}}
 						>
+							{/* Show a list of pictures */}
 							{pictures?.map((picture) => (
 								<img
 									key={picture}
@@ -184,12 +190,15 @@ const MovieDetails = ({
 								<Tab key={season?.number}>Season {season?.number}</Tab>
 							))}
 						</TabList>
+
+						{/* Map the seasons to show them in tabs */}
 						{seasons?.map((season) => (
 							<TabPanel
 								value={season?.number - 1}
 								sx={{ p: 2 }}
 								key={season?.number}
 							>
+								{/* Map the episodes to show them in a list */}
 								{season?.episodes?.map(({ episode, name, air_date }) => {
 									return (
 										<Box

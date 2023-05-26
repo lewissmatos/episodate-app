@@ -24,7 +24,6 @@ const MovieCard = ({
 			<Typography level="body2" sx={{ textAlign: "left" }}>
 				{network}
 			</Typography>
-
 			<AspectRatio ratio="1" sx={{ my: 2 }}>
 				<img
 					className="movie-card-zoom"
@@ -42,6 +41,7 @@ const MovieCard = ({
 						fontSize="lg"
 						fontWeight="lg"
 						sx={{
+							//Validate the movie state to change de label color
 							color: status?.toLowerCase()?.includes("ended")
 								? "#D3232F"
 								: "#2CA24D",

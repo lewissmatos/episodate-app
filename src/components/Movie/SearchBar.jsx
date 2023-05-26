@@ -16,12 +16,47 @@ function SearchBar({
 	historyList,
 	queries,
 }) {
+	//Input value state in order to handle its value
 	const [inputValue, setInputValue] = useState("");
 
+	//Handle the input value to make a search request with its value
+	const onInputChange = (e) => {
+		//Fucntion to make the search request
+		onChange(e);
+		setInputValue(e?.target?.value);
+	};
+
+	//Handle the history value clicked to make an inmediatelly request with the clicked item
+	const onParamChange = (e, newValue) => {
+		setInputValue(newValue);
+		//Fucntion to make the search request
+		onChange({ target: { name: "q", value: newValue } }, newValue);
+	};
+
+	//Delete an item from the history
+	const onDeleteHistoryItem = (e, item) => {
+		//Handle the onClick funciton propagation so it won't select a history item when clicking on detele item button
+		e.stopPropagation();
+		//Call the delete history list item function
+		deleteHistoryElement(item);
+		//Call onFocus function on the input in order to update the search history and not to see the deleted item
+		onFocus();
+	};
+
+	//Call the search function with the keyboard "Enter" or "Return" key
+	const onEnterKeyUp = (e) => {
+		if (e.keyCode === 13) {
+			onSearch();
+		}
+	};
+
 	useEffect(() => {
+		//If queries has a nullish value, set the value of the search input as an empty string
 		if (!queries) {
 			setInputValue("");
 		}
+
+		//Validate it everytime queries changes its value
 	}, [queries]);
 	return (
 		<Box
@@ -35,16 +70,10 @@ function SearchBar({
 				sx={{ width: "600px" }}
 				name="q"
 				onFocus={onFocus}
-				onInputChange={(e) => {
-					onChange(e);
-					setInputValue(e?.target?.value);
-				}}
+				onInputChange={onInputChange}
 				size="lg"
 				inputValue={inputValue || ""}
-				onChange={(e, newValue) => {
-					setInputValue(newValue);
-					onChange({ target: { name: "q", value: newValue } }, newValue);
-				}}
+				onChange={onParamChange}
 				renderOption={(props, option) => (
 					<AutocompleteOption
 						{...props}
@@ -52,16 +81,12 @@ function SearchBar({
 					>
 						{option}
 						<IconButton
-							onClick={(e) => {
-								e.stopPropagation();
-								deleteHistoryElement(option);
-								onFocus();
-							}}
+							onClick={(e) => onDeleteHistoryItem(e, option)}
 							size="sm"
 							variant="plain"
 							color="danger"
 						>
-							<i className="fi fi-rr-circle-xmark"></i>{" "}
+							<i className="fi fi-rr-circle-xmark"></i>
 						</IconButton>
 					</AutocompleteOption>
 				)}
@@ -71,15 +96,7 @@ function SearchBar({
 				freeSolo
 				render
 				endDecorator={
-					<Button
-						disabled={disabled}
-						onClick={onSearch}
-						onKeyUp={(e) => {
-							if (e.keyCode === 13) {
-								onSearch();
-							}
-						}}
-					>
+					<Button disabled={disabled} onClick={onSearch} onKeyUp={onEnterKeyUp}>
 						Search
 					</Button>
 				}

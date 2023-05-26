@@ -36,7 +36,8 @@ const Homescreen = () => {
 		image_thumbnail_path: null,
 	});
 
-	//Function to
+	/* Get all movies, using an url and optional params. 
+	This function is used for any type of rquest using the API */
 	const onGetMovies = async ({ url, params }) => {
 		setIsLoading(true);
 		if (params) {
@@ -48,6 +49,8 @@ const Homescreen = () => {
 		setIsLoading(false);
 	};
 
+	/* Change Query param to search a movie. Ex: ?q=*query*.
+	Also, it's used to select a value directly from the search history */
 	const onQueryParamChange = (e, directValue) => {
 		if (!e?.target?.value) {
 			onResetSearch();
@@ -56,6 +59,8 @@ const Homescreen = () => {
 				...prevVal,
 				[e?.target?.name]: e?.target?.value,
 			}));
+
+		//"directValue" indicates that the function has to call the movies inmediatelly
 		if (directValue) {
 			onGetMovies({
 				url: "search",
@@ -65,14 +70,19 @@ const Homescreen = () => {
 		}
 	};
 
+	//Reset the request and the query to their initial values
 	const onResetSearch = () => {
 		setRequestQueries();
 		onGetMovies({ url: "most-popular" });
 	};
 
+	//Get movie's details by the url and params
 	const onGetDetails = async ({ url, params }) => {
 		setIsLoadingDetails({ isLoading: true, id: params?.q });
+		//The params have movie's id so it can get its details
 		const res = await getMovies({ url, params });
+
+		//Set the movie's details to a state
 		setMovieDetails(res?.tvShow);
 		setIsLoadingDetails({ isLoading: false, id: null });
 		setOpenMovieDetails(true);
@@ -82,16 +92,25 @@ const Homescreen = () => {
 		setOpenMovieDetails(false);
 	};
 
+	//Add item to search history
 	const onAddSearchHistoryParam = (item) => {
 		setSearchHistoryItem(item);
 	};
 
+	//Get item to search history
 	const onGetSearchHistory = () => {
 		let history = getSearchHistory();
 		setSearchHistory(history);
 	};
 
+	//Search movies by query params
+	const onSearch = () => {
+		onGetMovies({ url: "search", params: requestQueries });
+		onGetSearchHistory();
+	};
+
 	useEffect(() => {
+		//Call the fist default request
 		onGetMovies({ url: "most-popular" });
 		return () => {
 			setMoviesData([]);
@@ -116,10 +135,7 @@ const Homescreen = () => {
 					historyList={searchHistory || []}
 					onReset={onResetSearch}
 					queries={requestQueries}
-					onSearch={() => {
-						onGetMovies({ url: "search", params: requestQueries });
-						onGetSearchHistory();
-					}}
+					onSearch={onSearch}
 				/>
 				{isLoading ? (
 					<CircularProgress
@@ -130,9 +146,7 @@ const Homescreen = () => {
 				) : moviesData?.total > 0 ? (
 					<Grid container sx={{ rowGap: 4 }}>
 						{moviesData?.tv_shows?.map((movie) => {
-							let mdSize = 3;
-
-							mdSize = moviesData?.tv_shows?.length < 3 ? 6 : 3;
+							let mdSize = moviesData?.tv_shows?.length < 3 ? 6 : 3;
 							return (
 								<Grid
 									key={movie.id}
@@ -144,6 +158,7 @@ const Homescreen = () => {
 									<MovieCard
 										movie={movie}
 										onShowDetails={() =>
+											//Call the function in order to set the movie details to show
 											onGetDetails({
 												url: "show-details",
 												params: { q: movie.id },
