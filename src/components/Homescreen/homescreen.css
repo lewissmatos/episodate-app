@@ -1,0 +1,14 @@
+.movie-card-list {
+	display: flex;
+	gap: 16px;
+	overflow-y: auto;
+	max-width: 1200px;
+	padding: 10px 0px;
+}
+
+.app-container {
+	height: 900px;
+	/* min-height: 600px; */
+	flex-direction: column;
+	width: 100% !important;
+}
