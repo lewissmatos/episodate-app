@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
+import { Box, CircularProgress, Grid } from "@mui/joy";
 import { getMovies } from "../../services/episodate.service";
 import MovieCard from "../Movie/MovieCard";
-import SearchBar from "../Movie/SearchBar";
-
+import SearchBar from "../Filter/SearchBar";
+import MovieDetails from "../Movie/MovieDetails";
+import NoMovieFound from "../Movie/NoMovieFound";
 import "./homescreen.css";
 import {
 	getSearchHistory,
 	setSearchHistoryItem,
 } from "../../services/history.service";
-import { CircularProgress, Grid } from "@mui/joy";
-import MovieDetails from "../Movie/MovieDetails";
-import NoMovieFound from "../Movie/NoMovieFound";
+import Pagination from "../Filter/Pagination";
+
 const Homescreen = () => {
-	//Stative variables used for controlling the request and behaivor
+	//Stative variables used for controlling the request and behavior
 	const [moviesData, setMoviesData] = useState();
 	const [requestQueries, setRequestQueries] = useState();
 	const [searchHistory, setSearchHistory] = useState([]);
@@ -27,9 +28,7 @@ const Homescreen = () => {
 	const [movieDetails, setMovieDetails] = useState({
 		id: null,
 		name: null,
-		permalink: null,
 		start_date: null,
-		end_date: null,
 		country: null,
 		network: null,
 		status: null,
@@ -92,12 +91,12 @@ const Homescreen = () => {
 		setOpenMovieDetails(false);
 	};
 
-	//Add item to search history
+	//Add item to thesearch history
 	const onAddSearchHistoryParam = (item) => {
 		setSearchHistoryItem(item);
 	};
 
-	//Get item to search history
+	//Get item to the search history
 	const onGetSearchHistory = () => {
 		let history = getSearchHistory();
 		setSearchHistory(history);
@@ -106,6 +105,12 @@ const Homescreen = () => {
 	//Search movies by query params
 	const onSearch = () => {
 		onGetMovies({ url: "search", params: requestQueries });
+		onGetSearchHistory();
+	};
+
+	//Handle the pagination by changing the curren page
+	const onChangePage = (page) => {
+		onGetMovies({ url: "search", params: { ...requestQueries, page: page } });
 		onGetSearchHistory();
 	};
 
@@ -128,15 +133,33 @@ const Homescreen = () => {
 				/>
 			) : null}
 			<div className="app-container">
-				<SearchBar
-					onChange={onQueryParamChange}
-					disabled={!requestQueries}
-					onFocus={onGetSearchHistory}
-					historyList={searchHistory || []}
-					onReset={onResetSearch}
-					queries={requestQueries}
-					onSearch={onSearch}
-				/>
+				<Box
+					sx={{
+						display: "flex",
+						flexDirection: { md: "row", xs: "column" },
+						justifyContent: "center",
+						columnGap: { md: 2, xs: 0 },
+						mb: 2,
+					}}
+				>
+					<SearchBar
+						onChange={onQueryParamChange}
+						disabled={!requestQueries}
+						onFocus={onGetSearchHistory}
+						historyList={searchHistory || []}
+						onReset={onResetSearch}
+						queries={requestQueries}
+						onSearch={onSearch}
+					/>
+					<Box sx={{ display: "flex", justifyContent: "center" }}>
+						<Pagination
+							page={moviesData?.page}
+							setRequestQueries={setRequestQueries}
+							onChangePage={onChangePage}
+							moviesData={moviesData}
+						/>
+					</Box>
+				</Box>
 				{isLoading ? (
 					<CircularProgress
 						sx={{ width: 400, height: 500 }}

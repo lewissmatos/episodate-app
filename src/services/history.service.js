@@ -2,7 +2,16 @@
 export const getSearchHistory = () => {
 	//Get the history from local storage
 	//Use JSON functions to parse the local storage string value into an array
-	return JSON.parse(localStorage.getItem("history"));
+	let history = JSON.parse(localStorage.getItem("history"));
+
+	//Validate if there's any corrupted or damaged item that affects the applicaton's behavior
+	let item = history?.find((itm) => !itm?.id || !itm?.value);
+
+	if (item) {
+		//If there's any corrupted item, reset the search history
+		resetHistory();
+	}
+	return history;
 };
 
 //Add a new item to the search history
@@ -64,3 +73,7 @@ export const deleteHistoryElement = (item) => {
 	//Save the new history to local storage
 	localStorage.setItem("history", JSON.stringify(newHistory));
 };
+
+//Function to reset the search history to an empty array
+export const resetHistory = () =>
+	localStorage.setItem("history", JSON.stringify([]));

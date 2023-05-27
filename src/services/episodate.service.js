@@ -11,10 +11,11 @@ export const getMovies = ({ url, params = {} }) => {
 			?.map((key, index) => {
 				//Create the value in the query,it's gotten from the position of the key
 				let value = Object.values(params)[index];
-				return `${key}=${value}`;
+				return `${key}=${value}&`;
 			})
 			.join("");
 	}
+
 	return serviceHttp()
 		.get(`${url}?${queryParams}`)
 		.then((res) => res);

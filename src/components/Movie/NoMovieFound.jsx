@@ -3,10 +3,7 @@ import { Box, Button, Typography } from "@mui/joy";
 const NoMovieFound = ({ goToHome }) => {
 	return (
 		<Box>
-			<Typography
-				level="body2"
-				sx={{ textAlign: "center", color: "white", fontSize: 50 }}
-			>
+			<Typography level="body2" sx={{ textAlign: "center", fontSize: 50 }}>
 				{"Sorry, we couldn't find any matches for your search."}
 			</Typography>
 			<img

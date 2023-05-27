@@ -79,7 +79,7 @@ const MovieDetails = ({
 			<Box
 				sx={{
 					width: { xs: 550, md: 1200 },
-					height: 800,
+					height: { xs: 1000, md: 800 },
 					bgcolor: "white",
 					padding: 4,
 					borderRadius: 8,
