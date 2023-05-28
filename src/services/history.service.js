@@ -30,9 +30,9 @@ export const setSearchHistoryItem = (item) => {
 	let id = 1;
 
 	//Function to assign an id to the item
-	const getRandomId = (max) => {
+	const getRandomId = (max, min) => {
 		//Use Math library to generate a random number from 1 - 10
-		id = Math.floor(Math.random() * max);
+		id = Math.floor(Math.random() * (max - min) + min);
 
 		//Validate if the id aready exists
 		if (history?.some((record) => record?.id === id)) {
@@ -42,7 +42,7 @@ export const setSearchHistoryItem = (item) => {
 	};
 
 	//Call the id assigner function
-	getRandomId(10);
+	getRandomId(10, 1);
 
 	const newItem = {
 		id,

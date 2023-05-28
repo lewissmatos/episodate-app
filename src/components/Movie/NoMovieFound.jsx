@@ -7,9 +7,9 @@ const NoMovieFound = ({ goToHome }) => {
 				{"Sorry, we couldn't find any matches for your search."}
 			</Typography>
 			<img
-				src="../../../public/search.png"
+				src="/search.png"
 				style={{ width: 300, marginTop: 20 }}
-				alt="not found"
+				alt="not movie found"
 			/>
 			<Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
 				<Button size="lg" onClick={goToHome}>

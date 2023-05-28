@@ -39,7 +39,7 @@ const Homescreen = () => {
 	This function is used for any type of rquest using the API */
 	const onGetMovies = async ({ url, params }) => {
 		setIsLoading(true);
-		if (params) {
+		if (params?.q) {
 			onAddSearchHistoryParam(params?.q);
 		}
 		onGetSearchHistory();
@@ -173,9 +173,9 @@ const Homescreen = () => {
 							return (
 								<Grid
 									key={movie.id}
-									item
 									xs={12}
 									md={mdSize}
+									sm={4}
 									sx={{ p: 0, m: 0 }}
 								>
 									<MovieCard

@@ -38,7 +38,7 @@ const Pagination = ({ moviesData, page, setRequestQueries, onChangePage }) => {
 		{
 			label: "Prev",
 			onClick: previousPage,
-			disabled: moviesData?.pages === 1,
+			disabled: moviesData?.page === 1,
 		},
 		{
 			label: "Next",
@@ -73,7 +73,7 @@ const Pagination = ({ moviesData, page, setRequestQueries, onChangePage }) => {
 					key={option?.label}
 					sx={{ fontSize: 14 }}
 					onClick={option?.onClick}
-					disabled={option?.disabled}
+					disabled={option?.disabled || !moviesData?.pages}
 				>
 					{option?.label}
 				</IconButton>

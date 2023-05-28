@@ -94,7 +94,6 @@ function SearchBar({
 				placeholder="Search anything"
 				type="search"
 				freeSolo
-				render
 				endDecorator={
 					<Button disabled={disabled} onClick={onSearch} onKeyUp={onEnterKeyUp}>
 						Search

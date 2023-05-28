@@ -16,14 +16,17 @@ const MovieDetails = ({
 		name,
 		description,
 		start_date,
+		end_date,
 		country,
 		status,
 		network,
+		runtime,
 		image_thumbnail_path,
 		rating,
 		genres,
 		pictures,
 		episodes,
+		url,
 	},
 	open,
 	onClose,
@@ -79,7 +82,7 @@ const MovieDetails = ({
 			<Box
 				sx={{
 					width: { xs: 550, md: 1200 },
-					height: { xs: 1000, md: 800 },
+					height: { xs: 1000, md: 750 },
 					bgcolor: "white",
 					padding: 4,
 					borderRadius: 8,
@@ -97,9 +100,15 @@ const MovieDetails = ({
 					}}
 				>
 					<Box>
-						<Typography component="h2" sx={{ fontWeight: 700, fontSize: 30 }}>
+						<a
+							// component="h2"
+							href={url}
+							style={{ fontWeight: 700, fontSize: 30, color: "black" }}
+							rel="noreferrer"
+							target="_blank"
+						>
 							{name}
-						</Typography>
+						</a>
 						<Typography sx={{ color: "grey", fontSize: 18 }}>
 							{network}
 						</Typography>
@@ -137,19 +146,40 @@ const MovieDetails = ({
 							alt={name}
 						/>
 					</Box>
-					<Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+					<Box
+						sx={{
+							display: "flex",
+							flexDirection: "column",
+							gap: 1,
+							overflowX: "auto",
+						}}
+					>
 						<Typography sx={{ fontWeight: 700, fontSize: 20 }}>
 							Description:{" "}
 						</Typography>
-						<Typography>{description}</Typography>
+						<Typography>
+							{description
+								?.replace("<b>", "") //replace "%" to ""
+								?.replace("</b>", "")
+								?.replace("<br>", "")
+								?.replace("</br>", "")}
+						</Typography>
 						<Typography>
 							<Typography sx={{ fontWeight: 600 }}>Rating: </Typography>{" "}
-							{rating}
+							{Number(rating) || "No info"}
 						</Typography>
 						<Typography>
-							<Typography sx={{ fontWeight: 600 }}>Start Date: </Typography>{" "}
-							{start_date}
+							<Typography sx={{ fontWeight: 600 }}>Running date: </Typography>{" "}
+							{start_date} {end_date ? `- ${end_date}` : ""}
 						</Typography>
+						{runtime ? (
+							<Typography>
+								<Typography sx={{ fontWeight: 600 }}>
+									Runtime average:{" "}
+								</Typography>{" "}
+								{runtime}
+							</Typography>
+						) : null}
 						<Typography>
 							<Typography sx={{ fontWeight: 600 }}>Genrers: </Typography>{" "}
 							{/* Join the genrers array to show them as a text */}
